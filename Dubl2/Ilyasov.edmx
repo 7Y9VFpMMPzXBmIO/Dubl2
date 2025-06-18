@@ -1,0 +1,399 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Хранилище IlyasovModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Edinisi_izmereniy">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="Edinisa_izmerenia" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Materiali">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="Naimenovania_materiala" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Tip_materiala" Type="int" Nullable="false" />
+          <Property Name="Sena_edinisi_materiala" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Kolichestvo_na_sklade" Type="int" Nullable="false" />
+          <Property Name="Minimalnoe_kolichestvo" Type="int" Nullable="false" />
+          <Property Name="Kolichestvo_v_upakovke" Type="int" Nullable="false" />
+          <Property Name="Edinisa_izmerenia" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Materiali_produksiy">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="Produksia" Type="int" Nullable="false" />
+          <Property Name="Naimenovanie_materiala" Type="int" Nullable="false" />
+          <Property Name="Neobhodimoe_kolichetvo_materiala" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Produksii">
+          <Key>
+            <PropertyRef Name="Artikul" />
+          </Key>
+          <Property Name="Artikul" Type="int" Nullable="false" />
+          <Property Name="Tip_produksii" Type="int" Nullable="false" />
+          <Property Name="Naimenovanie_produksii" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Minimalnya_stoimost_dlya_partnera" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Shirina_rulona" Type="float" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Tipi_materialov">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="Tip_materiala" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Procent_braka_materiala" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Tipi_produksiy">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="Tip_produksii" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="K_tipa_produksii" Type="float" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Material_Edinisa_izmerenia">
+          <End Role="Edinisi_izmereniy" Type="Self.Edinisi_izmereniy" Multiplicity="1" />
+          <End Role="Materiali" Type="Self.Materiali" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Edinisi_izmereniy">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Materiali">
+              <PropertyRef Name="Edinisa_izmerenia" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Material_Tip_Materiala">
+          <End Role="Tipi_materialov" Type="Self.Tipi_materialov" Multiplicity="1" />
+          <End Role="Materiali" Type="Self.Materiali" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tipi_materialov">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Materiali">
+              <PropertyRef Name="Tip_materiala" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Materiali_produksii_Material">
+          <End Role="Materiali" Type="Self.Materiali" Multiplicity="1" />
+          <End Role="Materiali_produksiy" Type="Self.Materiali_produksiy" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Materiali">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Materiali_produksiy">
+              <PropertyRef Name="Naimenovanie_materiala" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Materiali_produksii_Produksia">
+          <End Role="Produksii" Type="Self.Produksii" Multiplicity="1" />
+          <End Role="Materiali_produksiy" Type="Self.Materiali_produksiy" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Produksii">
+              <PropertyRef Name="Artikul" />
+            </Principal>
+            <Dependent Role="Materiali_produksiy">
+              <PropertyRef Name="Produksia" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Produksia_Tip_Produksii">
+          <End Role="Tipi_produksiy" Type="Self.Tipi_produksiy" Multiplicity="1" />
+          <End Role="Produksii" Type="Self.Produksii" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tipi_produksiy">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Produksii">
+              <PropertyRef Name="Tip_produksii" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище IlyasovModelContainer">
+          <EntitySet Name="Edinisi_izmereniy" EntityType="Self.Edinisi_izmereniy" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Materiali" EntityType="Self.Materiali" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Materiali_produksiy" EntityType="Self.Materiali_produksiy" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Produksii" EntityType="Self.Produksii" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Tipi_materialov" EntityType="Self.Tipi_materialov" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Tipi_produksiy" EntityType="Self.Tipi_produksiy" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Material_Edinisa_izmerenia" Association="Self.FK_Material_Edinisa_izmerenia">
+            <End Role="Edinisi_izmereniy" EntitySet="Edinisi_izmereniy" />
+            <End Role="Materiali" EntitySet="Materiali" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Material_Tip_Materiala" Association="Self.FK_Material_Tip_Materiala">
+            <End Role="Tipi_materialov" EntitySet="Tipi_materialov" />
+            <End Role="Materiali" EntitySet="Materiali" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Materiali_produksii_Material" Association="Self.FK_Materiali_produksii_Material">
+            <End Role="Materiali" EntitySet="Materiali" />
+            <End Role="Materiali_produksiy" EntitySet="Materiali_produksiy" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Materiali_produksii_Produksia" Association="Self.FK_Materiali_produksii_Produksia">
+            <End Role="Produksii" EntitySet="Produksii" />
+            <End Role="Materiali_produksiy" EntitySet="Materiali_produksiy" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Produksia_Tip_Produksii" Association="Self.FK_Produksia_Tip_Produksii">
+            <End Role="Tipi_produksiy" EntitySet="Tipi_produksiy" />
+            <End Role="Produksii" EntitySet="Produksii" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="IlyasovModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Edinisi_izmereniy">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="Edinisa_izmerenia" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Materiali" Relationship="Self.FK_Material_Edinisa_izmerenia" FromRole="Edinisi_izmereniy" ToRole="Materiali" />
+        </EntityType>
+        <EntityType Name="Materiali">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="Naimenovania_materiala" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Tip_materiala" Type="Int32" Nullable="false" />
+          <Property Name="Sena_edinisi_materiala" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Kolichestvo_na_sklade" Type="Int32" Nullable="false" />
+          <Property Name="Minimalnoe_kolichestvo" Type="Int32" Nullable="false" />
+          <Property Name="Kolichestvo_v_upakovke" Type="Int32" Nullable="false" />
+          <Property Name="Edinisa_izmerenia" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Edinisi_izmereniy" Relationship="Self.FK_Material_Edinisa_izmerenia" FromRole="Materiali" ToRole="Edinisi_izmereniy" />
+          <NavigationProperty Name="Tipi_materialov" Relationship="Self.FK_Material_Tip_Materiala" FromRole="Materiali" ToRole="Tipi_materialov" />
+          <NavigationProperty Name="Materiali_produksiy" Relationship="Self.FK_Materiali_produksii_Material" FromRole="Materiali" ToRole="Materiali_produksiy" />
+        </EntityType>
+        <EntityType Name="Materiali_produksiy">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="Produksia" Type="Int32" Nullable="false" />
+          <Property Name="Naimenovanie_materiala" Type="Int32" Nullable="false" />
+          <Property Name="Neobhodimoe_kolichetvo_materiala" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <NavigationProperty Name="Materiali" Relationship="Self.FK_Materiali_produksii_Material" FromRole="Materiali_produksiy" ToRole="Materiali" />
+          <NavigationProperty Name="Produksii" Relationship="Self.FK_Materiali_produksii_Produksia" FromRole="Materiali_produksiy" ToRole="Produksii" />
+        </EntityType>
+        <EntityType Name="Produksii">
+          <Key>
+            <PropertyRef Name="Artikul" />
+          </Key>
+          <Property Name="Artikul" Type="Int32" Nullable="false" />
+          <Property Name="Tip_produksii" Type="Int32" Nullable="false" />
+          <Property Name="Naimenovanie_produksii" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Minimalnya_stoimost_dlya_partnera" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Shirina_rulona" Type="Double" Nullable="false" />
+          <NavigationProperty Name="Materiali_produksiy" Relationship="Self.FK_Materiali_produksii_Produksia" FromRole="Produksii" ToRole="Materiali_produksiy" />
+          <NavigationProperty Name="Tipi_produksiy" Relationship="Self.FK_Produksia_Tip_Produksii" FromRole="Produksii" ToRole="Tipi_produksiy" />
+        </EntityType>
+        <EntityType Name="Tipi_materialov">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="Tip_materiala" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Procent_braka_materiala" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <NavigationProperty Name="Materiali" Relationship="Self.FK_Material_Tip_Materiala" FromRole="Tipi_materialov" ToRole="Materiali" />
+        </EntityType>
+        <EntityType Name="Tipi_produksiy">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="Tip_produksii" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="K_tipa_produksii" Type="Double" Nullable="false" />
+          <NavigationProperty Name="Produksii" Relationship="Self.FK_Produksia_Tip_Produksii" FromRole="Tipi_produksiy" ToRole="Produksii" />
+        </EntityType>
+        <Association Name="FK_Material_Edinisa_izmerenia">
+          <End Role="Edinisi_izmereniy" Type="Self.Edinisi_izmereniy" Multiplicity="1" />
+          <End Role="Materiali" Type="Self.Materiali" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Edinisi_izmereniy">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Materiali">
+              <PropertyRef Name="Edinisa_izmerenia" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Material_Tip_Materiala">
+          <End Role="Tipi_materialov" Type="Self.Tipi_materialov" Multiplicity="1" />
+          <End Role="Materiali" Type="Self.Materiali" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tipi_materialov">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Materiali">
+              <PropertyRef Name="Tip_materiala" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Materiali_produksii_Material">
+          <End Role="Materiali" Type="Self.Materiali" Multiplicity="1" />
+          <End Role="Materiali_produksiy" Type="Self.Materiali_produksiy" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Materiali">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Materiali_produksiy">
+              <PropertyRef Name="Naimenovanie_materiala" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Materiali_produksii_Produksia">
+          <End Role="Produksii" Type="Self.Produksii" Multiplicity="1" />
+          <End Role="Materiali_produksiy" Type="Self.Materiali_produksiy" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Produksii">
+              <PropertyRef Name="Artikul" />
+            </Principal>
+            <Dependent Role="Materiali_produksiy">
+              <PropertyRef Name="Produksia" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Produksia_Tip_Produksii">
+          <End Role="Tipi_produksiy" Type="Self.Tipi_produksiy" Multiplicity="1" />
+          <End Role="Produksii" Type="Self.Produksii" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tipi_produksiy">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Produksii">
+              <PropertyRef Name="Tip_produksii" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="IlyasovEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Edinisi_izmereniy" EntityType="Self.Edinisi_izmereniy" />
+          <EntitySet Name="Materiali" EntityType="Self.Materiali" />
+          <EntitySet Name="Materiali_produksiy" EntityType="Self.Materiali_produksiy" />
+          <EntitySet Name="Produksii" EntityType="Self.Produksii" />
+          <EntitySet Name="Tipi_materialov" EntityType="Self.Tipi_materialov" />
+          <EntitySet Name="Tipi_produksiy" EntityType="Self.Tipi_produksiy" />
+          <AssociationSet Name="FK_Material_Edinisa_izmerenia" Association="Self.FK_Material_Edinisa_izmerenia">
+            <End Role="Edinisi_izmereniy" EntitySet="Edinisi_izmereniy" />
+            <End Role="Materiali" EntitySet="Materiali" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Material_Tip_Materiala" Association="Self.FK_Material_Tip_Materiala">
+            <End Role="Tipi_materialov" EntitySet="Tipi_materialov" />
+            <End Role="Materiali" EntitySet="Materiali" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Materiali_produksii_Material" Association="Self.FK_Materiali_produksii_Material">
+            <End Role="Materiali" EntitySet="Materiali" />
+            <End Role="Materiali_produksiy" EntitySet="Materiali_produksiy" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Materiali_produksii_Produksia" Association="Self.FK_Materiali_produksii_Produksia">
+            <End Role="Produksii" EntitySet="Produksii" />
+            <End Role="Materiali_produksiy" EntitySet="Materiali_produksiy" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Produksia_Tip_Produksii" Association="Self.FK_Produksia_Tip_Produksii">
+            <End Role="Tipi_produksiy" EntitySet="Tipi_produksiy" />
+            <End Role="Produksii" EntitySet="Produksii" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище IlyasovModelContainer" CdmEntityContainer="IlyasovEntities">
+          <EntitySetMapping Name="Edinisi_izmereniy">
+            <EntityTypeMapping TypeName="IlyasovModel.Edinisi_izmereniy">
+              <MappingFragment StoreEntitySet="Edinisi_izmereniy">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Edinisa_izmerenia" ColumnName="Edinisa_izmerenia" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Materiali">
+            <EntityTypeMapping TypeName="IlyasovModel.Materiali">
+              <MappingFragment StoreEntitySet="Materiali">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Naimenovania_materiala" ColumnName="Naimenovania_materiala" />
+                <ScalarProperty Name="Tip_materiala" ColumnName="Tip_materiala" />
+                <ScalarProperty Name="Sena_edinisi_materiala" ColumnName="Sena_edinisi_materiala" />
+                <ScalarProperty Name="Kolichestvo_na_sklade" ColumnName="Kolichestvo_na_sklade" />
+                <ScalarProperty Name="Minimalnoe_kolichestvo" ColumnName="Minimalnoe_kolichestvo" />
+                <ScalarProperty Name="Kolichestvo_v_upakovke" ColumnName="Kolichestvo_v_upakovke" />
+                <ScalarProperty Name="Edinisa_izmerenia" ColumnName="Edinisa_izmerenia" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Materiali_produksiy">
+            <EntityTypeMapping TypeName="IlyasovModel.Materiali_produksiy">
+              <MappingFragment StoreEntitySet="Materiali_produksiy">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Produksia" ColumnName="Produksia" />
+                <ScalarProperty Name="Naimenovanie_materiala" ColumnName="Naimenovanie_materiala" />
+                <ScalarProperty Name="Neobhodimoe_kolichetvo_materiala" ColumnName="Neobhodimoe_kolichetvo_materiala" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Produksii">
+            <EntityTypeMapping TypeName="IlyasovModel.Produksii">
+              <MappingFragment StoreEntitySet="Produksii">
+                <ScalarProperty Name="Artikul" ColumnName="Artikul" />
+                <ScalarProperty Name="Tip_produksii" ColumnName="Tip_produksii" />
+                <ScalarProperty Name="Naimenovanie_produksii" ColumnName="Naimenovanie_produksii" />
+                <ScalarProperty Name="Minimalnya_stoimost_dlya_partnera" ColumnName="Minimalnya_stoimost_dlya_partnera" />
+                <ScalarProperty Name="Shirina_rulona" ColumnName="Shirina_rulona" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tipi_materialov">
+            <EntityTypeMapping TypeName="IlyasovModel.Tipi_materialov">
+              <MappingFragment StoreEntitySet="Tipi_materialov">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Tip_materiala" ColumnName="Tip_materiala" />
+                <ScalarProperty Name="Procent_braka_materiala" ColumnName="Procent_braka_materiala" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tipi_produksiy">
+            <EntityTypeMapping TypeName="IlyasovModel.Tipi_produksiy">
+              <MappingFragment StoreEntitySet="Tipi_produksiy">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Tip_produksii" ColumnName="Tip_produksii" />
+                <ScalarProperty Name="K_tipa_produksii" ColumnName="K_tipa_produksii" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
